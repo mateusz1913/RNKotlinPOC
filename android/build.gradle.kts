@@ -1,24 +1,24 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext {
-        buildToolsVersion = "30.0.2"
-        minSdkVersion = 21
-        compileSdkVersion = 30
-        targetSdkVersion = 30
-        ndkVersion = "21.4.7075529"
-        kotlinVersion = "1.6.10" // <------ specify your Kotlin version
+    extra.apply {
+        set("buildToolsVersion", "30.0.2")
+        set("minSdkVersion", 21)
+        set("compileSdkVersion", 30)
+        set("targetSdkVersion", 30)
+        set("ndkVersion", "21.4.7075529")
+        set("kotlinVersion", "1.6.10")
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
+        val kotlinVersion: String by rootProject.extra
         classpath("com.android.tools.build:gradle:4.2.2")
-        // <------ Add Kotlin Gradle Plugin
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        // in the individual module build.gradle.kts files
     }
 }
 
@@ -26,20 +26,22 @@ allprojects {
     repositories {
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url("$rootDir/../node_modules/react-native/android")
+            url = uri("$rootDir/../node_modules/react-native/android")
         }
         maven {
             // Android JSC is installed from npm
-            url("$rootDir/../node_modules/jsc-android/dist")
+            url = uri("$rootDir/../node_modules/jsc-android/dist")
         }
         mavenCentral {
             // We don't want to fetch react-native from Maven Central as there are
             // older versions over there.
             content {
-                excludeGroup "com.facebook.react"
+                excludeGroup("com.facebook.react")
             }
         }
         google()
-        maven { url 'https://www.jitpack.io' }
+        maven {
+            url = uri("https://www.jitpack.io")
+        }
     }
 }
